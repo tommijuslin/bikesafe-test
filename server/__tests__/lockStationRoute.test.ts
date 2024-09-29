@@ -42,7 +42,7 @@ describe("GET /api/lock_stations", () => {
         
         expect(lockStation.id).toBe(1)
         expect(lockStation.coordinateId).toBe(1)
-        expect(lockStation.coordinate).toEqual({id: 1, lat: 40, lng:60})
+        expect(lockStation.coordinate).toEqual({id: 1, lat: 41, lng:60})
         
     })
 
