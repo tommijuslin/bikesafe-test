@@ -3,6 +3,7 @@ import supertest from 'supertest'
 import { sequelize } from '../src/util/db'
 import { LockStation } from '../src/models/lockStation'
 import { Coordinate } from '../src/models/coordinate'
+import { migrator } from '../src/util/db'
 
 const api = supertest(app)
 
@@ -18,8 +19,8 @@ const initialCoordinates = [
 ]
 
 beforeEach(async () => {
-    
-    await sequelize.sync({ force: true })
+    await sequelize.getQueryInterface().dropAllTables()
+    await migrator.up()
     const coordinates = await Coordinate.bulkCreate(initialCoordinates)
     const lockStations = [
         {coordinateId: coordinates[0].id},
@@ -42,7 +43,7 @@ describe("GET /api/lock_stations", () => {
         
         expect(lockStation.id).toBe(1)
         expect(lockStation.coordinateId).toBe(1)
-        expect(lockStation.coordinate).toEqual({id: 1, lat: 41, lng:60})
+        expect(lockStation.coordinate).toEqual({id: 1, lat: 40, lng:60})
         
     })
 

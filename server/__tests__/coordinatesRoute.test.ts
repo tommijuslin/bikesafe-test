@@ -2,6 +2,7 @@ import { app } from '../src/index'
 import supertest from 'supertest'
 import { sequelize } from '../src/util/db'
 import { Coordinate } from '../src/models/coordinate'
+import { migrator } from '../src/util/db'
 
 const api = supertest(app)
 
@@ -17,7 +18,8 @@ const initialCoordinates = [
 ]
 
 beforeEach(async () => {
-    await sequelize.sync({ force: true })
+    await sequelize.getQueryInterface().dropAllTables()
+    await migrator.up()
     await Coordinate.bulkCreate(initialCoordinates)
 })
 
