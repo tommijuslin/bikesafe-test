@@ -1,4 +1,4 @@
-import { app } from '../src/index'
+import { app } from '../src/app'
 import supertest from 'supertest'
 import { sequelize } from '../src/util/db'
 import { BikeTheft } from '../src/models/bikeTheft'
@@ -19,7 +19,6 @@ const initialCoordinates = [
 ]
 
 beforeEach(async () => {
-    // await sequelize.sync({ force: true })
     await sequelize.getQueryInterface().dropAllTables()
     await migrator.up()
     const coordinates = await Coordinate.bulkCreate(initialCoordinates)

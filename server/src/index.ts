@@ -1,46 +1,18 @@
-import 'express-async-errors'
-import express from 'express'
-import { connectToDatabase } from './util/db'
-import { PORT } from './util/config'
-import { errorHandler } from './util/middleware'
-import cors from 'cors'
-export const app = express()
+import { app } from "./app"
+import { connectToDatabase } from "./util/db"
+import { PORT } from "./util/config"
 
-import coordinatesRouter from './routes/coordinatesRoute'
-import bikeTheftRouter from './routes/bikeTheftRoute'
-import lockStationRouter from './routes/lockStationRoute'
-import testingRouter from './routes/testingRoute'
-
-app.use(express.json())
-app.use(cors())
-
-app.use('/api/coordinates', coordinatesRouter)
-app.use('/api/bike_thefts', bikeTheftRouter)
-app.use('/api/lock_stations', lockStationRouter)
-
-app.use('/testing', testingRouter)
-
-
-app.get('/ping', (_req, res) => {
-  console.log('someone pinged here')
-  res.send('pong')
-})
-
-const start = async (): Promise<void> => {
+const startServer = async (): Promise<void> => {
   try {
     await connectToDatabase()
-    if (process.env.NODE_ENV !== 'test') {
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`)
-    })}
-
+    })
   } catch (error) {
     console.error('Failed to start server:', error)
   }
 }
 
-start().catch((error) => {
+startServer().catch((error) => {
   console.error("Unhandled error on server startup:", error)
 })
-
-app.use(errorHandler)

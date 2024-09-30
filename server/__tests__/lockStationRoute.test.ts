@@ -1,4 +1,4 @@
-import { app } from '../src/index'
+import { app } from '../src/app'
 import supertest from 'supertest'
 import { sequelize } from '../src/util/db'
 import { LockStation } from '../src/models/lockStation'
