@@ -18,15 +18,21 @@ const initialCoordinates = [
     }
 ]
 
-beforeEach(async () => {
-    await sequelize.getQueryInterface().dropAllTables()
+beforeAll(async () => {
     await migrator.up()
+})
+
+beforeEach(async () => {
     const coordinates = await Coordinate.bulkCreate(initialCoordinates)
     const lockStations = [
         {coordinateId: coordinates[0].id},
         {coordinateId: coordinates[1].id}
     ]
     await LockStation.bulkCreate(lockStations)
+})
+
+afterEach(async () => {
+    await sequelize.truncate({ cascade: true, restartIdentity: true })
 })
 
 describe("GET /api/lock_stations", () => {

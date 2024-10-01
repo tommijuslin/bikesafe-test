@@ -17,10 +17,16 @@ const initialCoordinates = [
     }
 ]
 
-beforeEach(async () => {
-    await sequelize.getQueryInterface().dropAllTables()
+beforeAll(async () => {
     await migrator.up()
+})
+
+beforeEach(async () => {
     await Coordinate.bulkCreate(initialCoordinates)
+})
+
+afterEach(async () => {
+    await sequelize.truncate({ cascade: true, restartIdentity: true })
 })
 
 describe("GET /api/coordinates", () => {
